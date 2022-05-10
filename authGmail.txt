@@ -1,0 +1,2 @@
+- Detalhe no gmail → Autorizar acesso a app menos seguro.
+Gerenciar sua conta do Google / Segurança / Acesso a app menos seguro / Ativar acesso (não recomendado) / Ativar

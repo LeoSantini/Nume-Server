@@ -1,4 +1,4 @@
 /node_modules 
 .env 
-.authGmail.txt
-.TODO.JS
+/authGmail.txt
+/TODO.JS

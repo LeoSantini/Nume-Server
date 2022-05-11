@@ -1,4 +1,4 @@
-const expressJWT = require("express-jwt"); // Express JWT
+const { expressjwt: expressJWT } = require("express-jwt");
 
 function extractTokenFromHeaders(req, res) {
   // Extract token from headers
@@ -10,7 +10,7 @@ function extractTokenFromHeaders(req, res) {
 }
 
 module.exports = expressJWT({
-  secret: process.env.JWT_SECRET, // Secret
+  secret: process.env.TOKEN_SECRET, // Secret
   userProperty: "user", // User property
   getToken: extractTokenFromHeaders, // Extract token
   algorithms: ["HS256"], // Algorithms

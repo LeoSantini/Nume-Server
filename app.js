@@ -7,3 +7,10 @@ const app = express(); // Creates an Express application
 
 app.use(express.json()); // Parse JSON data
 app.use(cors({ origin: process.env.REACT_APP_URL })); // Allow cross-origin requests
+
+const userRouter = require("./routes/users.routes"); // User routes
+app.use("/users", userRouter); // User routes
+
+app.listen(Number(process.env.PORT) || 3000, () => {
+  console.log(`Server running on port ${process.env.PORT}`);
+}); // Server running on port 3000

@@ -2,7 +2,7 @@ const User = require("../models/User.model"); // User is the name of the collect
 
 module.exports = async (req, res, next) => {
   try {
-    const loggedUser = req.body ? req.body.user : req.user; // Logged user
+    const loggedUser = req.auth; // loggedUser is the user object from the token
 
     const user = await User.findOne(
       {

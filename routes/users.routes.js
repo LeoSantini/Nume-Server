@@ -131,4 +131,30 @@ router.patch("/update-profile", isAuth, attachCurrentUser, async (req, res) => {
     return res.status(500).json({ msg: "Internal server error:" + err.msg }); // Internal server error
   }
 });
+
+router.delete(
+  "/delete-profile",
+  isAuth,
+  attachCurrentUser,
+  async (req, res) => {
+    try {
+      const loggedUser = req.currentUser; // Logged user
+
+      const disableUser = await User.findOneAndUpdate(
+        { _id: loggedUser._id },
+        { userIsActive: false },
+        { new: true }
+      );
+
+      delete disableUser._doc.passwordHash; // Delete password hash
+      delete disableUser._doc.resetPasswordToken; // Delete reset password token
+      delete disableUser._doc.__v; // Delete version
+
+      return res.status(200).json(disableUser); // Ok
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ msg: "Internal server error:" + err.msg }); // Internal server error
+    }
+  }
+);
 module.exports = router; // Exports router

@@ -12,7 +12,7 @@ const UserSchema = new Schema({
     unique: true,
     trim: true,
     lowercase: true,
-    match: /\@numeeventos\.com/gm,
+    match: /^[A-Za-z0-9._%+-]+@numeeventos.com$/gm,
   }, // Email of the user
 
   birthday: { type: Date, required: true }, // Birthday of the user

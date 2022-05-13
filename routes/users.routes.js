@@ -9,6 +9,7 @@ const User = require("../models/User.model"); // User
 const saltRounds = 10; // Salt rounds
 
 router.post("/create-user", async (req, res) => {
+  // Create user
   try {
     const { password } = req.body; // Password
 
@@ -36,6 +37,66 @@ router.post("/create-user", async (req, res) => {
 
     console.log(newUser);
     return res.status(201).json(newUser._doc); // Created
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: "Internal server error:" + err.msg }); // Internal server error
+  }
+});
+
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body; // Email and password
+
+    const user = await User.findOne({ email }); // User
+
+    if (!user) {
+      return res.status(400).json({ msg: "Invalid email or password." }); // Invalid email or password
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.passwordHash); // Is password valid
+
+    if (!isPasswordValid) {
+      return res.status(400).json({ msg: "Invalid email or password." }); // Invalid email or password
+    }
+
+    const token = generateToken(user); // Token
+
+    return res.status(200).json({
+      user: {
+        name: user.name,
+        lastName: user.lastName,
+        email: user.email,
+        _id: user._id,
+        role: user.role,
+      },
+      token,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: "Internal server error:" + err.msg }); // Internal server error
+  }
+});
+
+router.get("/profile", isAuth, attachCurrentUser, async (req, res) => {
+  try {
+    const loggedUser = req.currentUser; // Logged user
+
+    if (!loggedUser.userIsActive) {
+      return res.status(401).json({ msg: "Unauthorized" }); // Unauthorized
+    }
+
+    if (loggedUser) {
+      const populateUser = await User.findById(loggedUser._id); // Populate user
+
+      delete populateUser._doc.passwordHash; // Delete password hash
+      delete populateUser._doc.resetPasswordToken; // Delete reset password token
+      delete populateUser._doc.__v; // Delete version
+
+      console.log(populateUser);
+      return res.status(200).json(populateUser); // Ok
+    } else {
+      return res.status(404).json({ msg: "User not found" }); // Not found
+    }
   } catch (err) {
     console.log(err);
     return res.status(500).json({ msg: "Internal server error:" + err.msg }); // Internal server error

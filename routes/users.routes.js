@@ -5,6 +5,7 @@ const attachCurrentUser = require("../middlewares/attachCurrentUser"); // Attach
 const bcrypt = require("bcrypt"); // Bcrypt
 const generateToken = require("../config/jwt.config"); // JWT
 const User = require("../models/User.model"); // User
+const { UnauthorizedError } = require("express-jwt");
 
 const saltRounds = 10; // Salt rounds
 
@@ -44,6 +45,7 @@ router.post("/create-user", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
+  // Login
   try {
     const { email, password } = req.body; // Email and password
 
@@ -78,6 +80,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/profile", isAuth, attachCurrentUser, async (req, res) => {
+  // Profile
   try {
     const loggedUser = req.currentUser; // Logged user
 
@@ -103,4 +106,29 @@ router.get("/profile", isAuth, attachCurrentUser, async (req, res) => {
   }
 });
 
+router.patch("/update-profile", isAuth, attachCurrentUser, async (req, res) => {
+  // Update profile
+  try {
+    const loggedUser = req.currentUser; // Logged user
+
+    if (!loggedUser.userIsActive) {
+      return res.status(401).json({ msg: "Unauthorized" }); // Unauthorized
+    }
+
+    const updateUser = await User.findOneAndUpdate(
+      { _id: loggedUser._id },
+      { ...req.body },
+      { new: true }
+    );
+
+    delete updateUser._doc.passwordHash; // Delete password hash
+    delete updateUser._doc.resetPasswordToken; // Delete reset password token
+    delete updateUser._doc.__v; // Delete version
+
+    return res.status(200).json(updateUser); // Ok
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: "Internal server error:" + err.msg }); // Internal server error
+  }
+});
 module.exports = router; // Exports router

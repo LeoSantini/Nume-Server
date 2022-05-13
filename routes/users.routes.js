@@ -137,6 +137,7 @@ router.delete(
   isAuth,
   attachCurrentUser,
   async (req, res) => {
+    // Delete profile
     try {
       const loggedUser = req.currentUser; // Logged user
 
@@ -151,6 +152,33 @@ router.delete(
       delete disableUser._doc.__v; // Delete version
 
       return res.status(200).json(disableUser); // Ok
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ msg: "Internal server error:" + err.msg }); // Internal server error
+    }
+  }
+);
+
+router.patch(
+  "/activate-profile",
+  isAuth,
+  attachCurrentUser,
+  async (req, res) => {
+    // Activate profile
+    try {
+      const loggedUser = req.currentUser; // Logged user
+
+      const activateUser = await User.findOneAndUpdate(
+        { _id: loggedUser._id },
+        { userIsActive: true },
+        { new: true, runValidators: true }
+      );
+
+      delete activateUser._doc.passwordHash; // Delete password hash
+      delete activateUser._doc.resetPasswordToken; // Delete reset password token
+      delete activateUser._doc.__v; // Delete version
+
+      return res.status(200).json(activateUser); // Ok
     } catch (err) {
       console.log(err);
       return res.status(500).json({ msg: "Internal server error:" + err.msg }); // Internal server error

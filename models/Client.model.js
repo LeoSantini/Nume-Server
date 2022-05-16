@@ -46,11 +46,15 @@ const ClientContactSchema = new Schema({
       required: true,
       enum: ["Completa", "Parcial", "Personalizada"],
     }, // Type of the service
-
-    supplierName: { type: String }, // Name of the supplier
-
-    note: { type: String }, // Note of the investment
   }),
+
+  supplierName: { type: String }, // Name of the supplier
+
+  note: { type: String }, // Note of the investment
+
+  response: { type: Boolean, default: false }, // Response of the contact
+
+  hiredService: { type: Boolean, default: false }, // Hired of the contact
 });
 
 const ClientContact = mongoose.model("ClientContact", ClientContactSchema); // ClientContact is the name of the collection

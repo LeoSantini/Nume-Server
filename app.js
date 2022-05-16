@@ -11,6 +11,9 @@ app.use(cors({ origin: process.env.REACT_APP_URL })); // Allow cross-origin requ
 const userRouter = require("./routes/users.routes"); // User routes
 app.use("/users", userRouter); // User routes
 
+const clientRouter = require("./routes/client.routes"); // Client routes
+app.use("/client", clientRouter); // Client routes
+
 app.listen(Number(process.env.PORT) || 3000, () => {
   console.log(`Server running on port ${process.env.PORT}`);
-}); // Server running on port 3000
+}); // Server running on port 4000 || 3000

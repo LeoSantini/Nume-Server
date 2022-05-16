@@ -9,8 +9,7 @@ router.post("/create-client", async (req, res) => {
   // Create client
   try {
     const newClient = await Client.create(req.body);
-    console.log(newClient);
-    console.log(req.body);
+
     return res.status(201).json(newClient);
   } catch (err) {
     console.log(err);

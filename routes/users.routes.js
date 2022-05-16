@@ -5,7 +5,6 @@ const attachCurrentUser = require("../middlewares/attachCurrentUser"); // Attach
 const bcrypt = require("bcrypt"); // Bcrypt
 const generateToken = require("../config/jwt.config"); // JWT
 const User = require("../models/User.model"); // User
-const { UnauthorizedError } = require("express-jwt");
 
 const saltRounds = 10; // Salt rounds
 
@@ -89,7 +88,9 @@ router.get("/profile", isAuth, attachCurrentUser, async (req, res) => {
     }
 
     if (loggedUser) {
-      const populateUser = await User.findById(loggedUser._id); // Populate user
+      const populateUser = await User.findById(loggedUser._id).populate(
+        "client"
+      ); // Populate user
 
       delete populateUser._doc.passwordHash; // Delete password hash
       delete populateUser._doc.resetPasswordToken; // Delete reset password token

@@ -88,16 +88,14 @@ router.get("/profile", isAuth, attachCurrentUser, async (req, res) => {
     }
 
     if (loggedUser) {
-      const populateUser = await User.findById(loggedUser._id).populate(
-        "client"
-      ); // Populate user
+      const getUser = await User.findById(loggedUser._id); // Get user
 
-      delete populateUser._doc.passwordHash; // Delete password hash
-      delete populateUser._doc.resetPasswordToken; // Delete reset password token
-      delete populateUser._doc.__v; // Delete version
+      delete getUser._doc.passwordHash; // Delete password hash
+      delete getUser._doc.resetPasswordToken; // Delete reset password token
+      delete getUser._doc.__v; // Delete version
 
-      console.log(populateUser);
-      return res.status(200).json(populateUser); // Ok
+      console.log(getUser);
+      return res.status(200).json(getUser); // Ok
     } else {
       return res.status(404).json({ msg: "User not found" }); // Not found
     }

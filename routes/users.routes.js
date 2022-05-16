@@ -35,10 +35,8 @@ router.post("/create-user", async (req, res) => {
     delete newUser._doc.resetPasswordToken; // Delete reset password token
     delete newUser._doc.__v; // Delete version
 
-    console.log(newUser);
     return res.status(201).json(newUser._doc); // Created
   } catch (err) {
-    console.log(err);
     return res.status(500).json({ msg: "Internal server error:" + err.msg }); // Internal server error
   }
 });
@@ -73,7 +71,6 @@ router.post("/login", async (req, res) => {
       token,
     });
   } catch (err) {
-    console.log(err);
     return res.status(500).json({ msg: "Internal server error:" + err.msg }); // Internal server error
   }
 });
@@ -94,13 +91,11 @@ router.get("/profile", isAuth, attachCurrentUser, async (req, res) => {
       delete getUser._doc.resetPasswordToken; // Delete reset password token
       delete getUser._doc.__v; // Delete version
 
-      console.log(getUser);
       return res.status(200).json(getUser); // Ok
     } else {
       return res.status(404).json({ msg: "User not found" }); // Not found
     }
   } catch (err) {
-    console.log(err);
     return res.status(500).json({ msg: "Internal server error:" + err.msg }); // Internal server error
   }
 });
@@ -126,7 +121,6 @@ router.patch("/update-profile", isAuth, attachCurrentUser, async (req, res) => {
 
     return res.status(200).json(updateUser); // Ok
   } catch (err) {
-    console.log(err);
     return res.status(500).json({ msg: "Internal server error:" + err.msg }); // Internal server error
   }
 });
@@ -152,7 +146,6 @@ router.delete(
 
       return res.status(200).json(disableUser); // Ok
     } catch (err) {
-      console.log(err);
       return res.status(500).json({ msg: "Internal server error:" + err.msg }); // Internal server error
     }
   }
@@ -179,7 +172,6 @@ router.patch(
 
       return res.status(200).json(activateUser); // Ok
     } catch (err) {
-      console.log(err);
       return res.status(500).json({ msg: "Internal server error:" + err.msg }); // Internal server error
     }
   }

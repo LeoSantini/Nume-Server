@@ -32,8 +32,6 @@ const UserSchema = new Schema({
   userIsActive: { type: Boolean, default: true }, // User is active
 
   role: { type: String, default: "ADMIN" }, // Role of the user
-
-  client: { type: mongoose.Schema.Types.ObjectId, ref: "Client" }, // Client of the user
 });
 
 const User = mongoose.model("User", UserSchema); // User is the name of the collection

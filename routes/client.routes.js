@@ -4,11 +4,38 @@ const Client = require("../models/Client.model"); // Client
 const User = require("../models/User.model"); // User
 const isAuth = require("../middlewares/isAuth"); // Is auth
 const attachCurrentUser = require("../middlewares/attachCurrentUser"); // Attach current user
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD,
+  },
+});
 
 router.post("/create-client", async (req, res) => {
   // Create client
   try {
     const newClient = await Client.create(req.body); // Create client
+
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: newClient.email,
+      subject: "Contato Nume Eventos",
+      html: `<h1>Olá ${newClient.name}!</h1>`,
+    };
+
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          message: "Error sending e-mail" + err,
+        });
+      } else {
+        console.log(info);
+      }
+    });
 
     return res.status(201).json(newClient);
   } catch (err) {

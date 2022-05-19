@@ -20,8 +20,9 @@ router.post("/create-client", async (req, res) => {
     const newClient = await Client.create(req.body); // Create client
 
     const mailOptions = {
-      from: newClient.email,
-      to: process.env.EMAIL,
+      from: process.env.EMAIL,
+      to: newClient.email,
+      bcc: process.env.EMAIL,
       subject: "Contato Nume Eventos",
       html: `<h1>Olá ${newClient.name}!</h1>`,
     }; // Mail options

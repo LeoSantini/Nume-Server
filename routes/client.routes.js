@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL,
     pass: process.env.PASSWORD,
   },
-});
+}); // Create transporter
 
 router.post("/create-client", async (req, res) => {
   // Create client
@@ -20,11 +20,11 @@ router.post("/create-client", async (req, res) => {
     const newClient = await Client.create(req.body); // Create client
 
     const mailOptions = {
-      from: process.env.EMAIL,
-      to: newClient.email,
+      from: newClient.email,
+      to: process.env.EMAIL,
       subject: "Contato Nume Eventos",
       html: `<h1>Olá ${newClient.name}!</h1>`,
-    };
+    }; // Mail options
 
     transporter.sendMail(mailOptions, (err, info) => {
       if (err) {
@@ -35,9 +35,9 @@ router.post("/create-client", async (req, res) => {
       } else {
         console.log(info);
       }
-    });
+    }); // Send mail
 
-    return res.status(201).json(newClient);
+    return res.status(201).json(newClient); // Return client
   } catch (err) {
     return res.status(500).json({ msg: "Internal server error:" + err.msg }); // Internal server error
   }

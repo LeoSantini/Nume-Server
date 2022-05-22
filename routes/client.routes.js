@@ -3,6 +3,7 @@ const router = express.Router(); // Router
 const Client = require("../models/Client.model"); // Client
 const isAuth = require("../middlewares/isAuth"); // Is auth
 const attachCurrentUser = require("../middlewares/attachCurrentUser"); // Attach current user
+const nodemailer = require("nodemailer"); // Nodemailer
 
 const transporter = nodemailer.createTransport({
   service: "gmail",

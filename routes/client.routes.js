@@ -5,6 +5,7 @@ const User = require("../models/User.model"); // User
 const isAuth = require("../middlewares/isAuth"); // Is auth
 const attachCurrentUser = require("../middlewares/attachCurrentUser"); // Attach current user
 const nodemailer = require("nodemailer");
+const hbs = require("nodemailer-express-handlebars");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -13,6 +14,14 @@ const transporter = nodemailer.createTransport({
     pass: process.env.PASSWORD,
   },
 }); // Create transporter
+
+transporter.use(
+  "compile",
+  hbs({
+    viewEngine: "express-handlebars",
+    viewPath: "../views/",
+  })
+);
 
 router.post("/create-client", async (req, res) => {
   // Create client
@@ -24,7 +33,7 @@ router.post("/create-client", async (req, res) => {
       to: newClient.email,
       bcc: process.env.EMAIL,
       subject: "Contato Nume Eventos",
-      html: `<h1>Olá ${newClient.name}!</h1>`,
+      template: "index",
     }; // Mail options
 
     transporter.sendMail(mailOptions, (err, info) => {

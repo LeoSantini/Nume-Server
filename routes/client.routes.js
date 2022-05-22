@@ -4,8 +4,8 @@ const Client = require("../models/Client.model"); // Client
 const User = require("../models/User.model"); // User
 const isAuth = require("../middlewares/isAuth"); // Is auth
 const attachCurrentUser = require("../middlewares/attachCurrentUser"); // Attach current user
-const nodemailer = require("nodemailer");
-const hbs = require("nodemailer-express-handlebars");
+const nodemailer = require("nodemailer"); // Nodemailer
+const hbs = require("nodemailer-express-handlebars"); // Handlebars
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -20,8 +20,9 @@ transporter.use(
   hbs({
     viewEngine: "express-handlebars",
     viewPath: "../views/",
+    extName: ".hbs",
   })
-);
+); // Use handlebars
 
 router.post("/create-client", async (req, res) => {
   // Create client

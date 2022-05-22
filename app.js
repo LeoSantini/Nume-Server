@@ -8,10 +8,6 @@ const app = express(); // Creates an Express application
 app.use(express.json()); // Parse JSON data
 app.use(cors({ origin: process.env.REACT_APP_URL })); // Allow cross-origin requests
 
-const exphbs = require("express-handlebars"); // Handlebars
-app.engine("handlebars", exphbs()); // Set handlebars as the default engine
-app.set("view engine", "handlebars"); // Set handlebars as the default engine
-
 const userRouter = require("./routes/users.routes"); // User routes
 app.use("/users", userRouter); // User routes
 

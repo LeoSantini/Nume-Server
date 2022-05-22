@@ -1,11 +1,8 @@
 const express = require("express"); // Express
 const router = express.Router(); // Router
 const Client = require("../models/Client.model"); // Client
-const User = require("../models/User.model"); // User
 const isAuth = require("../middlewares/isAuth"); // Is auth
 const attachCurrentUser = require("../middlewares/attachCurrentUser"); // Attach current user
-const nodemailer = require("nodemailer"); // Nodemailer
-const hbs = require("nodemailer-express-handlebars"); // Handlebars
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -14,15 +11,6 @@ const transporter = nodemailer.createTransport({
     pass: process.env.PASSWORD,
   },
 }); // Create transporter
-
-transporter.use(
-  "compile",
-  hbs({
-    viewEngine: "express-handlebars",
-    viewPath: "../views/",
-    extName: ".hbs",
-  })
-); // Use handlebars
 
 router.post("/create-client", async (req, res) => {
   // Create client
@@ -33,8 +21,8 @@ router.post("/create-client", async (req, res) => {
       from: process.env.EMAIL,
       to: newClient.email,
       bcc: process.env.EMAIL,
-      subject: "Teste",
-      template: "index",
+      subject: "E-mail Teste",
+      html: `<h1>Olá ${newClient.name}</h1>`,
     }; // Mail options
 
     transporter.sendMail(mailOptions, (err, info) => {

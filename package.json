@@ -20,7 +20,8 @@
     "express-jwt": "^7.7.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.3",
-    "nodemailer": "^6.7.5"
+    "nodemailer": "^6.7.5",
+    "nodemailer-express-handlebars": "^5.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.16"

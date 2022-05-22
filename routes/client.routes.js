@@ -33,7 +33,7 @@ router.post("/create-client", async (req, res) => {
       from: process.env.EMAIL,
       to: newClient.email,
       bcc: process.env.EMAIL,
-      subject: "Contato Nume Eventos",
+      subject: "Teste",
       template: "index",
     }; // Mail options
 

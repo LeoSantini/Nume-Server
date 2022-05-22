@@ -1,10 +1,8 @@
 const express = require("express"); // Express
 const router = express.Router(); // Router
 const Client = require("../models/Client.model"); // Client
-const User = require("../models/User.model"); // User
 const isAuth = require("../middlewares/isAuth"); // Is auth
 const attachCurrentUser = require("../middlewares/attachCurrentUser"); // Attach current user
-const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -20,10 +18,11 @@ router.post("/create-client", async (req, res) => {
     const newClient = await Client.create(req.body); // Create client
 
     const mailOptions = {
-      from: newClient.email,
-      to: process.env.EMAIL,
-      subject: "Contato Nume Eventos",
-      html: `<h1>Olá ${newClient.name}!</h1>`,
+      from: process.env.EMAIL,
+      to: newClient.email,
+      bcc: process.env.EMAIL,
+      subject: "E-mail Teste",
+      html: `<h1>Olá ${newClient.name}</h1>`,
     }; // Mail options
 
     transporter.sendMail(mailOptions, (err, info) => {

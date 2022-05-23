@@ -4,6 +4,8 @@ const Client = require("../models/Client.model"); // Client
 const isAuth = require("../middlewares/isAuth"); // Is auth
 const attachCurrentUser = require("../middlewares/attachCurrentUser"); // Attach current user
 const nodemailer = require("nodemailer"); // Nodemailer
+const path = require("path"); // Path
+const hbs = require("nodemailer-express-handlebars");
 
 // const transporter = nodemailer.createTransport({
 //   service: "gmail",
@@ -27,25 +29,57 @@ router.post("/create-client", async (req, res) => {
   try {
     const newClient = await Client.create(req.body); // Create client
 
+    const handlebarOptions = {
+      viewEngine: {
+        extname: ".handlebars",
+        partialsDir: path.resolve("./views/"),
+        defaultLayout: false,
+      },
+      viewPath: path.resolve("./views/"),
+      extName: ".handlebars",
+    };
+
+    transporter.use("compile", hbs(handlebarOptions)); // Use handlebars
+
     const mailOptions = {
       from: process.env.EMAIL,
       to: newClient.email,
       bcc: process.env.EMAIL,
       replyTo: newClient.email,
       subject: "E-mail Teste",
-      html: `<h1>Olá ${newClient.name}</h1>`,
+      template: "email",
+      context: {
+        name: newClient.name,
+      },
     }; // Mail options
 
     transporter.sendMail(mailOptions, (err, info) => {
       if (err) {
         console.log(err);
-        return res.status(500).json({
-          message: "Error sending e-mail" + err,
-        });
       } else {
         console.log(info);
       }
     }); // Send mail
+
+    // const mailOptions = {
+    //   from: process.env.EMAIL,
+    //   to: newClient.email,
+    //   bcc: process.env.EMAIL,
+    //   replyTo: newClient.email,
+    //   subject: "E-mail Teste",
+    //   html: `<h1>Olá ${newClient.name}</h1>`,
+    // }; // Mail options
+
+    // transporter.sendMail(mailOptions, (err, info) => {
+    //   if (err) {
+    //     console.log(err);
+    //     return res.status(500).json({
+    //       message: "Error sending e-mail" + err,
+    //     });
+    //   } else {
+    //     console.log(info);
+    //   }
+    // }); // Send mail
 
     return res.status(201).json(newClient); // Return client
   } catch (err) {

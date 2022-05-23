@@ -31,6 +31,7 @@ router.post("/create-client", async (req, res) => {
       from: process.env.EMAIL,
       to: newClient.email,
       bcc: process.env.EMAIL,
+      replyTo: newClient.email,
       subject: "E-mail Teste",
       html: `<h1>Olá ${newClient.name}</h1>`,
     }; // Mail options

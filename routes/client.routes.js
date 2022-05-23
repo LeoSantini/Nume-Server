@@ -5,13 +5,22 @@ const isAuth = require("../middlewares/isAuth"); // Is auth
 const attachCurrentUser = require("../middlewares/attachCurrentUser"); // Attach current user
 const nodemailer = require("nodemailer"); // Nodemailer
 
+// const transporter = nodemailer.createTransport({
+//   service: "gmail",
+//   auth: {
+//     user: process.env.EMAIL,
+//     pass: process.env.PASSWORD,
+//   },
+// }); // Create transporter
+
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.mailtrap.io",
+  port: 2525,
   auth: {
-    user: process.env.EMAIL,
-    pass: process.env.PASSWORD,
+    user: "988a1eb18cfe87",
+    pass: "c79149d77fa474",
   },
-}); // Create transporter
+});
 
 router.post("/create-client", async (req, res) => {
   // Create client

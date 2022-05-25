@@ -50,12 +50,12 @@ router.post("/create-client", async (req, res) => {
       template: "email",
       context: {
         name: newClient.name,
-        type: newClient.eventType,
-        data: newClient.eventDate,
-        place: newClient.eventPlace,
-        hour: newClient.eventTime,
-        value: newClient.investmentValue,
-        weddingType: newClient.serviceType,
+        type: newClient.eventData.eventType,
+        data: newClient.eventData.eventDate,
+        place: newClient.eventData.eventPlace,
+        hour: newClient.eventData.eventTime,
+        value: newClient.investment.investmentValue,
+        weddingType: newClient.investment.serviceType,
         supplier: newClient.supplierName,
       },
     }; // Mail options
